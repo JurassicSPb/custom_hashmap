@@ -50,7 +50,10 @@ public class CustomHashMap<K, V> implements Map<K, V> {
             if (buckets[i] != null) {
                 CustomEntry<K, V> currentBucket = buckets[i];
                 while (currentBucket != null) {
-                    if (currentBucket.getValue().equals(value)) {
+                    if (value==null && currentBucket.getValue()==null){
+                        return true;
+                    }
+                    else if (currentBucket.getValue().equals(value)) {
                         return true;
                     }
                     currentBucket = currentBucket.next();
@@ -62,6 +65,17 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(Object key) {
+        Objects.requireNonNull(key);
+
+        int hash = hashCode((K) key);
+        CustomEntry<K, V> currentEntry = buckets[hash];
+
+        while(currentEntry != null){
+            if(currentEntry.getKey().equals(key)){
+                return currentEntry.getValue();
+            }
+            currentEntry = currentEntry.next();
+        }
         return null;
     }
 
@@ -97,12 +111,12 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public void putAll(Map<? extends K, ? extends V> m) {
+    public void clear() {
 
     }
 
     @Override
-    public void clear() {
+    public void putAll(Map<? extends K, ? extends V> m) {
 
     }
 
